@@ -1,4 +1,4 @@
-from PIL import Image #If PIL stops existing this program stops existing lmfao
+from PIL import Image, ImageEnhance #If PIL stops existing this program stops existing lmfao
 import math #For Euclidean Color Distance calculation
 import os #For reading and writing
 
@@ -65,6 +65,8 @@ for png_file in png_files: #Miles's Illusion! This whole time the entire program
     width, height = png_file_rgba.size #Calculate dimensions
     if width != 16 or height != 16: #If dimensions are NOT 16x16
         png_file_rgba = png_file_rgba.resize((16, 16), Image.LANCZOS) #Resize with LANCZOS to get as much sharpness as possible. For some reason Nearest Neighbor deletes outlines
+        saturate = ImageEnhance.Color(png_file_rgba) #Initialize Saturation Fix to avoid the gray sprite bug
+        png_file_rgba = saturate.enhance(2) #Saturate the image by a factor of 2
     png_file_rgb = Image.new("RGB", png_file_rgba.size, (0, 127, 151)) #Create a new RGB image with the background color
     png_file_rgb.paste(png_file_rgba, mask=png_file_rgba.split()[3]) #Paste the RGBA image over the background, using the alpha channel as mask, effectively turning it into RGB
 
